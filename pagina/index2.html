@@ -1,0 +1,66 @@
+<head>
+
+  <link href="./src/style.css" rel="stylesheet"/>
+  <script src="./src/chai.js"></script>
+  <script src="./src/mocha.js"></script>
+  <script src="./src/sandbox.js"></script>
+
+  <style>
+    #contextos{
+        
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="mocha"></div>
+
+  <div id="contextos"></div>
+
+  <script>mocha.setup('bdd')</script>
+  <script src="./test/foo.test.js"></script>
+
+
+  <textarea id="codigo" rows="10" cols="80" oninput="cambio()">
+    function sum(a, b) {
+      return a + b;
+    }
+  </textarea>
+  </br>
+  <button type="button" onclick="myFunction()">
+    Ejecutar test
+  </button>
+
+  <script>
+  function myFunction() {
+
+    let codigo = document.getElementById("codigo").value;
+
+    guSandbox.nuevoContexto(codigo, [
+    
+        "test/foo.test.js"
+    
+    ])
+
+     
+
+  }
+
+  function cambio(){
+
+      localStorage.setItem("codigo", document.getElementById("codigo").value)
+  }
+
+  window.onload = function(){
+
+      document.getElementById("codigo").value = localStorage.getItem("codigo") || ""
+
+      document.getElementById("mocha").innerHTML = localStorage.getItem("ejecucion")
+
+  }
+
+  </script>
+
+</body>
