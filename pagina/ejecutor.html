@@ -1,0 +1,88 @@
+<head>
+
+  <link href="./src/style.css" rel="stylesheet"/>
+  <script src="./src/chai.js"></script>
+  <script src="./src/mocha.js"></script>
+  <script src="./src/sandbox.js"></script>
+
+</head>
+
+<body>
+
+    <div id="mocha"></div>
+
+    <script>
+    
+        window.onload = function(){
+
+            mocha.setup("bdd")
+
+            guSandbox.instalarBuzon(window.parent.document, (orden) => {
+            
+                runEjecutor(orden)
+            })
+
+            guSandbox.mensajeEnviar({
+            
+                respuesta: "LISTO"
+
+            })
+
+        }
+
+        function runEjecutor(orden){
+
+            switch(orden.tipo){
+
+                case "INICIAR":
+                    iniciarTest(orden.codigo, orden.tests);
+
+            }
+
+        }
+
+        function iniciarTest(codigo, tests){
+
+ 
+            cargarScriptsTest(tests)
+
+                .then(() => {
+                
+                    return cargarScriptsTest([codigo])
+                
+                })
+
+                .then(() => {
+
+                    guSandbox.iniciarTest(codigo)
+
+                })
+        }
+
+        function cargarScriptsTest(scriptsTest){
+
+            return Promise.all(
+            
+                scriptsTest.map((scriptTest) => {
+
+                    return new Promise((cumplida, falla) => {
+                    
+                        let script = document.createElement("script")
+
+                        script.onload = cumplida
+
+                        script.src = scriptTest
+
+                        document.head.appendChild(script)
+                    
+                    })
+
+                })
+                
+            )
+
+        }
+
+    </script>
+
+</body>
